@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İş Axtar - Azərbaycan</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #1769aa;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 15px;
+        }
+
+        .search-box {
+            background: white;
+            width: 90%;
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-box input,
+        .search-box select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            width: 100%;
+            padding: 14px;
+            background: #1769aa;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #0d4f82;
+        }
+
+        .jobs {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .jobs h2 {
+            margin-bottom: 15px;
+        }
+
+        .job {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .job h3 {
+            color: #1769aa;
+            margin-bottom: 8px;
+        }
+
+        .job p {
+            margin: 6px 0;
+        }
+
+        .apply {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: #1769aa;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #222;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>İş Axtar</h1>
+    <p>Azərbaycanda iş elanlarını asanlıqla tap</p>
+</header>
+
+<div class="search-box">
+
+    <input type="text" id="search" placeholder="Məsələn: Proqramçı, Mühasib, Sürücü...">
+
+    <select id="city">
+        <option value="">Şəhər seçin</option>
+        <option>Bakı</option>
+        <option>Gəncə</option>
+        <option>Sumqayıt</option>
+        <option>Mingəçevir</option>
+        <option>Şəki</option>
+        <option>Lənkəran</option>
+        <option>Digər</option>
+    </select>
+
+    <button onclick="searchJobs()">İş axtar</button>
+
+</div>
+
+<div class="jobs">
+
+    <h2>Son iş elanları</h2>
+
+    <div class="job">
+        <h3>Frontend Proqramçı</h3>
+        <p>📍 Bakı</p>
+        <p>💰 Maaş: 1000 - 1800 AZN</p>
+        <p>💼 Tam iş günü</p>
+        <a href="#" class="apply">Müraciət et</a>
+    </div>
+
+    <div class="job">
+        <h3>Mühasib</h3>
+        <p>📍 Gəncə</p>
+        <p>💰 Maaş: 700 - 1200 AZN</p>
+        <p>💼 Tam iş günü</p>
+        <a href="#" class="apply">Müraciət et</a>
+    </div>
+
+    <div class="job">
+        <h3>Sürücü</h3>
+        <p>📍 Sumqayıt</p>
+        <p>💰 Maaş: 600 - 1000 AZN</p>
+        <p>💼 Tam iş günü</p>
+        <a href="#" class="apply">Müraciət et</a>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 İş Axtar — Azərbaycanda iş elanları
+</footer>
+
+<script>
+function searchJobs() {
+    let search = document.getElementById("search").value;
+    let city = document.getElementById("city").value;
+
+    if (search === "" && city === "") {
+        alert("Zəhmət olmasa iş və ya şəhər seçin.");
+        return;
+    }
+
+    alert("Axtarış edildi: " + search + " " + city);
+}
+</script>
+
+</body>
+  </html>
