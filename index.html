@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İş Axtar - Azərbaycan</title>
+
+    <title>İş Axtar — Azərbaycan</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -21,13 +24,17 @@
         header {
             background: #1769aa;
             color: white;
-            padding: 20px;
+            padding: 25px 15px;
             text-align: center;
         }
 
         header h1 {
-            font-size: 30px;
+            font-size: 32px;
             margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 15px;
         }
 
         .menu {
@@ -35,10 +42,10 @@
         }
 
         .menu button {
-            padding: 10px 18px;
+            padding: 11px 20px;
             margin: 5px;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 15px;
         }
@@ -53,53 +60,48 @@
             color: white;
         }
 
-        .search-box {
-            background: white;
-            width: 90%;
+        .container {
+            width: 92%;
             max-width: 900px;
             margin: 25px auto;
+        }
+
+        .search-box,
+        .job,
+        .profile {
+            background: white;
             padding: 20px;
+            margin-bottom: 20px;
             border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
         }
 
         .search-box input,
-        .search-box select {
+        .search-box select,
+        .modal-box input,
+        .modal-box select {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
+            padding: 13px;
+            margin: 7px 0;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 16px;
         }
 
-        .search-box button {
+        .main-btn {
             width: 100%;
-            padding: 14px;
-            background: #1769aa;
-            color: white;
+            padding: 13px;
             border: none;
             border-radius: 8px;
-            font-size: 17px;
+            background: #1769aa;
+            color: white;
+            font-size: 16px;
             cursor: pointer;
+            margin-top: 8px;
         }
 
-        .jobs {
-            width: 90%;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        .jobs h2 {
-            margin-bottom: 15px;
-        }
-
-        .job {
-            background: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .main-btn:hover {
+            background: #0d4f82;
         }
 
         .job h3 {
@@ -108,17 +110,7 @@
         }
 
         .job p {
-            margin: 6px 0;
-        }
-
-        .apply {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 16px;
-            background: #1769aa;
-            color: white;
-            text-decoration: none;
-            border-radius: 7px;
+            margin: 7px 0;
         }
 
         .modal {
@@ -126,54 +118,65 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.6);
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             padding: 20px;
+            z-index: 1000;
         }
 
         .modal-box {
             background: white;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 14px;
         }
 
         .modal-box h2 {
-            margin-bottom: 15px;
             color: #1769aa;
+            margin-bottom: 15px;
         }
 
-        .modal-box input,
-        .modal-box select {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 12px;
-            border: 1px solid #ddd;
-            border-radius: 7px;
+        .close-btn {
+            background: #777;
         }
 
-        .modal-box button {
-            width: 100%;
-            padding: 13px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 7px;
-            background: #1769aa;
-            color: white;
-            cursor: pointer;
+        .profile {
+            display: none;
         }
 
-        .close {
-            background: #777 !important;
+        #profileImage {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: none;
+            margin: 15px auto;
+        }
+
+        .user-info {
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
             background: #222;
             color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .success {
+            color: green;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -187,56 +190,109 @@
     <p>Azərbaycanda iş elanlarını asanlıqla tap</p>
 
     <div class="menu">
-        <button class="login-btn" onclick="openLogin()">
+
+        <button
+            class="login-btn"
+            onclick="openLogin()">
             Giriş
         </button>
 
-        <button class="register-btn" onclick="openRegister()">
+        <button
+            class="register-btn"
+            onclick="openRegister()">
             Qeydiyyat
         </button>
+
     </div>
 
 </header>
 
 
-<div class="search-box">
+<div class="container">
 
-    <input
-        type="text"
-        id="search"
-        placeholder="Məsələn: Proqramçı, Mühasib, Sürücü..."
-    >
+    <!-- AXTARIŞ -->
 
-    <select id="city">
+    <div class="search-box">
 
-        <option value="">Şəhər seçin</option>
+        <input
+            type="text"
+            id="search"
+            placeholder="Məsələn: Proqramçı, Mühasib, Sürücü..."
+        >
 
-        <option>Bakı</option>
+        <select id="city">
 
-        <option>Gəncə</option>
+            <option value="">
+                Şəhər seçin
+            </option>
 
-        <option>Sumqayıt</option>
+            <option>Bakı</option>
+            <option>Gəncə</option>
+            <option>Sumqayıt</option>
+            <option>Mingəçevir</option>
+            <option>Şəki</option>
+            <option>Lənkəran</option>
+            <option>Yevlax</option>
 
-        <option>Mingəçevir</option>
+        </select>
 
-        <option>Şəki</option>
+        <button
+            class="main-btn"
+            onclick="searchJobs()">
+            İş axtar
+        </button>
 
-        <option>Lənkəran</option>
-
-        <option>Digər</option>
-
-    </select>
-
-    <button onclick="searchJobs()">
-        İş axtar
-    </button>
-
-</div>
+    </div>
 
 
-<div class="jobs">
+    <!-- PROFİL -->
 
-    <h2>Son iş elanları</h2>
+    <div
+        id="profileSection"
+        class="profile">
+
+        <h2>Profilim</h2>
+
+        <div class="user-info">
+
+            <img
+                id="profileImage"
+                alt="Profil şəkli"
+            >
+
+            <p id="userEmail"></p>
+
+            <p id="userType"></p>
+
+        </div>
+
+
+        <input
+            id="imageFile"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+        >
+
+        <button
+            class="main-btn"
+            onclick="uploadProfileImage()">
+            📷 Profil şəklini yüklə
+        </button>
+
+        <button
+            class="main-btn"
+            onclick="logout()">
+            Hesabdan çıx
+        </button>
+
+    </div>
+
+
+    <!-- ELANLAR -->
+
+    <h2 style="margin-bottom:15px;">
+        Son iş elanları
+    </h2>
 
 
     <div class="job">
@@ -249,9 +305,11 @@
 
         <p>💼 Tam iş günü</p>
 
-        <a href="#" class="apply">
+        <button
+            class="main-btn"
+            onclick="applyJob()">
             Müraciət et
-        </a>
+        </button>
 
     </div>
 
@@ -266,9 +324,11 @@
 
         <p>💼 Tam iş günü</p>
 
-        <a href="#" class="apply">
+        <button
+            class="main-btn"
+            onclick="applyJob()">
             Müraciət et
-        </a>
+        </button>
 
     </div>
 
@@ -283,41 +343,10 @@
 
         <p>💼 Tam iş günü</p>
 
-        <a href="#" class="apply">
+        <button
+            class="main-btn"
+            onclick="applyJob()">
             Müraciət et
-        </a>
-
-    </div>
-
-</div>
-
-
-<!-- GİRİŞ -->
-
-<div class="modal" id="loginModal">
-
-    <div class="modal-box">
-
-        <h2>Hesaba giriş</h2>
-
-        <input
-            type="email"
-            id="loginEmail"
-            placeholder="E-poçt"
-        >
-
-        <input
-            type="password"
-            id="loginPassword"
-            placeholder="Şifrə"
-        >
-
-        <button onclick="login()">
-            Daxil ol
-        </button>
-
-        <button class="close" onclick="closeModals()">
-            Bağla
         </button>
 
     </div>
@@ -327,53 +356,102 @@
 
 <!-- QEYDİYYAT -->
 
-<div class="modal" id="registerModal">
+<div
+    class="modal"
+    id="registerModal">
 
     <div class="modal-box">
 
         <h2>Qeydiyyat</h2>
 
         <input
-            type="text"
             id="registerName"
+            type="text"
             placeholder="Ad və soyad"
         >
 
         <input
-            type="email"
             id="registerEmail"
+            type="email"
             placeholder="E-poçt"
         >
 
         <input
-            type="password"
             id="registerPassword"
+            type="password"
             placeholder="Şifrə"
         >
 
-        <select id="userType">
+        <select id="registerType">
 
             <option value="">
                 Hesab növünü seçin
             </option>
 
             <option value="jobseeker">
-                İş axtaran
+                👤 İş axtaran
             </option>
 
             <option value="company">
-                Şirkət
+                🏢 Şirkət
             </option>
 
         </select>
 
-        <button onclick="register()">
+        <button
+            class="main-btn"
+            onclick="register()">
             Qeydiyyatdan keç
         </button>
 
-        <button class="close" onclick="closeModals()">
+        <button
+            class="main-btn close-btn"
+            onclick="closeModals()">
             Bağla
         </button>
+
+        <p id="registerMessage"></p>
+
+    </div>
+
+</div>
+
+
+<!-- GİRİŞ -->
+
+<div
+    class="modal"
+    id="loginModal">
+
+    <div class="modal-box">
+
+        <h2>Hesaba giriş</h2>
+
+        <input
+            id="loginEmail"
+            type="email"
+            placeholder="E-poçt"
+        >
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="Şifrə"
+        >
+
+        <button
+            class="main-btn"
+            onclick="login()">
+            Daxil ol
+        </button>
+
+        <button
+            class="main-btn close-btn"
+            onclick="closeModals()">
+            Bağla
+        </button>
+
+        <p id="loginMessage"></p>
 
     </div>
 
@@ -389,102 +467,475 @@
 
 <script>
 
+/* =================================
+   SUPABASE
+   ================================= */
+
+const SUPABASE_URL =
+    "https://uvxueptxrvpyspjyrigk.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_B5BCQWBmsYKNRd-VtG58Zw_CS4zCpgp";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =================================
+   PƏNCƏRƏLƏR
+   ================================= */
+
 function openLogin() {
 
-    document.getElementById("loginModal").style.display = "flex";
+    document.getElementById(
+        "loginModal"
+    ).style.display = "flex";
 
 }
 
 
 function openRegister() {
 
-    document.getElementById("registerModal").style.display = "flex";
+    document.getElementById(
+        "registerModal"
+    ).style.display = "flex";
 
 }
 
 
 function closeModals() {
 
-    document.getElementById("loginModal").style.display = "none";
+    document.getElementById(
+        "loginModal"
+    ).style.display = "none";
 
-    document.getElementById("registerModal").style.display = "none";
+    document.getElementById(
+        "registerModal"
+    ).style.display = "none";
 
 }
 
 
-function register() {
+/* =================================
+   QEYDİYYAT
+   ================================= */
 
-    let name =
-        document.getElementById("registerName").value;
+async function register() {
 
-    let email =
-        document.getElementById("registerEmail").value;
+    const name =
+        document.getElementById(
+            "registerName"
+        ).value.trim();
 
-    let password =
-        document.getElementById("registerPassword").value;
+    const email =
+        document.getElementById(
+            "registerEmail"
+        ).value.trim();
 
-    let type =
-        document.getElementById("userType").value;
+    const password =
+        document.getElementById(
+            "registerPassword"
+        ).value;
+
+    const type =
+        document.getElementById(
+            "registerType"
+        ).value;
+
+    const message =
+        document.getElementById(
+            "registerMessage"
+        );
+
+
+    message.className = "";
+    message.textContent = "";
 
 
     if (
-        name === "" ||
-        email === "" ||
-        password === "" ||
-        type === ""
+        !name ||
+        !email ||
+        !password ||
+        !type
     ) {
 
-        alert("Zəhmət olmasa bütün xanaları doldurun.");
+        message.className = "error";
+
+        message.textContent =
+            "Bütün xanaları doldurun.";
 
         return;
 
     }
 
 
-    alert(
-        "Qeydiyyat forması hazırdır. Real hesab sistemi növbəti mərhələdə qoşulacaq."
-    );
+    if (password.length < 6) {
 
-}
+        message.className = "error";
 
-
-function login() {
-
-    let email =
-        document.getElementById("loginEmail").value;
-
-    let password =
-        document.getElementById("loginPassword").value;
-
-
-    if (email === "" || password === "") {
-
-        alert("E-poçt və şifrəni daxil edin.");
+        message.textContent =
+            "Şifrə ən azı 6 simvol olmalıdır.";
 
         return;
 
     }
 
 
+    const { data, error } =
+        await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+                data: {
+
+                    name: name,
+
+                    user_type: type
+
+                }
+
+            }
+
+        });
+
+
+    if (error) {
+
+        message.className = "error";
+
+        message.textContent =
+            "Xəta: " + error.message;
+
+        return;
+
+    }
+
+
+    message.className = "success";
+
+    message.textContent =
+        "Qeydiyyat yaradıldı! E-poçt təsdiqi tələb olunarsa, e-poçtunu yoxla.";
+
+}
+
+
+/* =================================
+   GİRİŞ
+   ================================= */
+
+async function login() {
+
+    const email =
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
+    const message =
+        document.getElementById(
+            "loginMessage"
+        );
+
+
+    message.className = "";
+    message.textContent = "";
+
+
+    if (!email || !password) {
+
+        message.className = "error";
+
+        message.textContent =
+            "E-poçt və şifrəni daxil edin.";
+
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient.auth
+            .signInWithPassword({
+
+                email: email,
+
+                password: password
+
+            });
+
+
+    if (error) {
+
+        message.className = "error";
+
+        message.textContent =
+            "Giriş alınmadı: " +
+            error.message;
+
+        return;
+
+    }
+
+
+    message.className = "success";
+
+    message.textContent =
+        "Uğurla daxil oldunuz!";
+
+    closeModals();
+
+    showProfile(data.user);
+
+}
+
+
+/* =================================
+   PROFİLİ GÖSTƏR
+   ================================= */
+
+function showProfile(user) {
+
+    if (!user) return;
+
+
+    document.getElementById(
+        "profileSection"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "userEmail"
+    ).textContent =
+        "📧 E-poçt: " + user.email;
+
+
+    const type =
+        user.user_metadata?.user_type;
+
+
+    if (type === "company") {
+
+        document.getElementById(
+            "userType"
+        ).textContent =
+            "🏢 Hesab növü: Şirkət";
+
+    } else {
+
+        document.getElementById(
+            "userType"
+        ).textContent =
+            "👤 Hesab növü: İş axtaran";
+
+    }
+
+}
+
+
+/* =================================
+   ÇIXIŞ
+   ================================= */
+
+async function logout() {
+
+    const { error } =
+        await supabaseClient.auth.signOut();
+
+
+    if (error) {
+
+        alert(
+            "Çıxış zamanı xəta baş verdi."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "profileSection"
+    ).style.display = "none";
+
+
     alert(
-        "Giriş forması hazırdır. Real giriş sistemi növbəti mərhələdə qoşulacaq."
+        "Hesabdan çıxış edildi."
     );
 
 }
 
+
+/* =================================
+   PROFİL ŞƏKLİ YÜKLƏ
+   ================================= */
+
+async function uploadProfileImage() {
+
+    const file =
+        document.getElementById(
+            "imageFile"
+        ).files[0];
+
+
+    if (!file) {
+
+        alert(
+            "Əvvəlcə şəkil seçin."
+        );
+
+        return;
+
+    }
+
+
+    const {
+        data: { user }
+    } =
+        await supabaseClient.auth
+            .getUser();
+
+
+    if (!user) {
+
+        alert(
+            "Əvvəlcə hesabınıza daxil olun."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !file.type.startsWith(
+            "image/"
+        )
+    ) {
+
+        alert(
+            "Yalnız şəkil faylı seçin."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        file.size >
+        5 * 1024 * 1024
+    ) {
+
+        alert(
+            "Şəkil 5 MB-dan böyük ola bilməz."
+        );
+
+        return;
+
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    const filePath =
+        user.id +
+        "/profile." +
+        extension;
+
+
+    const { error } =
+        await supabaseClient.storage
+            .from("profile-images")
+            .upload(
+
+                filePath,
+
+                file,
+
+                {
+                    upsert: true
+                }
+
+            );
+
+
+    if (error) {
+
+        alert(
+            "Şəkil yüklənmədi: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    const { data } =
+        supabaseClient.storage
+            .from("profile-images")
+            .getPublicUrl(
+                filePath
+            );
+
+
+    document.getElementById(
+        "profileImage"
+    ).src =
+        data.publicUrl;
+
+
+    document.getElementById(
+        "profileImage"
+    ).style.display =
+        "block";
+
+
+    alert(
+        "Profil şəkli uğurla yükləndi! 📷"
+    );
+
+}
+
+
+/* =================================
+   AXTARIŞ
+   ================================= */
 
 function searchJobs() {
 
-    let search =
-        document.getElementById("search").value;
+    const search =
+        document.getElementById(
+            "search"
+        ).value.trim();
 
-    let city =
-        document.getElementById("city").value;
+    const city =
+        document.getElementById(
+            "city"
+        ).value;
 
 
-    if (search === "" && city === "") {
+    if (!search && !city) {
 
-        alert("Zəhmət olmasa iş və ya şəhər seçin.");
+        alert(
+            "İş adı və ya şəhər seçin."
+        );
 
         return;
 
@@ -499,6 +950,64 @@ function searchJobs() {
     );
 
 }
+
+
+/* =================================
+   MÜRACİƏT
+   ================================= */
+
+async function applyJob() {
+
+    const {
+        data: { user }
+    } =
+        await supabaseClient.auth
+            .getUser();
+
+
+    if (!user) {
+
+        alert(
+            "Müraciət etmək üçün əvvəlcə qeydiyyatdan keçin və ya daxil olun."
+        );
+
+        openLogin();
+
+        return;
+
+    }
+
+
+    alert(
+        "Müraciət sistemi növbəti mərhələdə aktiv ediləcək."
+    );
+
+}
+
+
+/* =================================
+   SAYT AÇILANDA HESABI YOXLAYIR
+   ================================= */
+
+async function checkUser() {
+
+    const {
+        data: { user }
+    } =
+        await supabaseClient.auth
+            .getUser();
+
+
+    if (user) {
+
+        showProfile(user);
+
+    }
+
+}
+
+
+checkUser();
 
 </script>
 
