@@ -30,8 +30,27 @@
             margin-bottom: 8px;
         }
 
-        header p {
+        .menu {
+            margin-top: 15px;
+        }
+
+        .menu button {
+            padding: 10px 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
             font-size: 15px;
+        }
+
+        .login-btn {
+            background: white;
+            color: #1769aa;
+        }
+
+        .register-btn {
+            background: #0d4f82;
+            color: white;
         }
 
         .search-box {
@@ -63,10 +82,6 @@
             border-radius: 8px;
             font-size: 17px;
             cursor: pointer;
-        }
-
-        .search-box button:hover {
-            background: #0d4f82;
         }
 
         .jobs {
@@ -106,6 +121,53 @@
             border-radius: 7px;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 12px;
+        }
+
+        .modal-box h2 {
+            margin-bottom: 15px;
+            color: #1769aa;
+        }
+
+        .modal-box input,
+        .modal-box select {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+        }
+
+        .modal-box button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 7px;
+            background: #1769aa;
+            color: white;
+            cursor: pointer;
+        }
+
+        .close {
+            background: #777 !important;
+        }
+
         footer {
             text-align: center;
             margin-top: 40px;
@@ -119,76 +181,326 @@
 <body>
 
 <header>
+
     <h1>İş Axtar</h1>
+
     <p>Azərbaycanda iş elanlarını asanlıqla tap</p>
+
+    <div class="menu">
+        <button class="login-btn" onclick="openLogin()">
+            Giriş
+        </button>
+
+        <button class="register-btn" onclick="openRegister()">
+            Qeydiyyat
+        </button>
+    </div>
+
 </header>
+
 
 <div class="search-box">
 
-    <input type="text" id="search" placeholder="Məsələn: Proqramçı, Mühasib, Sürücü...">
+    <input
+        type="text"
+        id="search"
+        placeholder="Məsələn: Proqramçı, Mühasib, Sürücü..."
+    >
 
     <select id="city">
+
         <option value="">Şəhər seçin</option>
+
         <option>Bakı</option>
+
         <option>Gəncə</option>
+
         <option>Sumqayıt</option>
+
         <option>Mingəçevir</option>
+
         <option>Şəki</option>
+
         <option>Lənkəran</option>
+
         <option>Digər</option>
+
     </select>
 
-    <button onclick="searchJobs()">İş axtar</button>
+    <button onclick="searchJobs()">
+        İş axtar
+    </button>
 
 </div>
+
 
 <div class="jobs">
 
     <h2>Son iş elanları</h2>
 
+
     <div class="job">
+
         <h3>Frontend Proqramçı</h3>
+
         <p>📍 Bakı</p>
+
         <p>💰 Maaş: 1000 - 1800 AZN</p>
+
         <p>💼 Tam iş günü</p>
-        <a href="#" class="apply">Müraciət et</a>
+
+        <a href="#" class="apply">
+            Müraciət et
+        </a>
+
     </div>
 
+
     <div class="job">
+
         <h3>Mühasib</h3>
+
         <p>📍 Gəncə</p>
+
         <p>💰 Maaş: 700 - 1200 AZN</p>
+
         <p>💼 Tam iş günü</p>
-        <a href="#" class="apply">Müraciət et</a>
+
+        <a href="#" class="apply">
+            Müraciət et
+        </a>
+
     </div>
 
+
     <div class="job">
+
         <h3>Sürücü</h3>
+
         <p>📍 Sumqayıt</p>
+
         <p>💰 Maaş: 600 - 1000 AZN</p>
+
         <p>💼 Tam iş günü</p>
-        <a href="#" class="apply">Müraciət et</a>
+
+        <a href="#" class="apply">
+            Müraciət et
+        </a>
+
     </div>
 
 </div>
 
+
+<!-- GİRİŞ -->
+
+<div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+        <h2>Hesaba giriş</h2>
+
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="E-poçt"
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Şifrə"
+        >
+
+        <button onclick="login()">
+            Daxil ol
+        </button>
+
+        <button class="close" onclick="closeModals()">
+            Bağla
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- QEYDİYYAT -->
+
+<div class="modal" id="registerModal">
+
+    <div class="modal-box">
+
+        <h2>Qeydiyyat</h2>
+
+        <input
+            type="text"
+            id="registerName"
+            placeholder="Ad və soyad"
+        >
+
+        <input
+            type="email"
+            id="registerEmail"
+            placeholder="E-poçt"
+        >
+
+        <input
+            type="password"
+            id="registerPassword"
+            placeholder="Şifrə"
+        >
+
+        <select id="userType">
+
+            <option value="">
+                Hesab növünü seçin
+            </option>
+
+            <option value="jobseeker">
+                İş axtaran
+            </option>
+
+            <option value="company">
+                Şirkət
+            </option>
+
+        </select>
+
+        <button onclick="register()">
+            Qeydiyyatdan keç
+        </button>
+
+        <button class="close" onclick="closeModals()">
+            Bağla
+        </button>
+
+    </div>
+
+</div>
+
+
 <footer>
+
     © 2026 İş Axtar — Azərbaycanda iş elanları
+
 </footer>
 
-<script>
-function searchJobs() {
-    let search = document.getElementById("search").value;
-    let city = document.getElementById("city").value;
 
-    if (search === "" && city === "") {
-        alert("Zəhmət olmasa iş və ya şəhər seçin.");
+<script>
+
+function openLogin() {
+
+    document.getElementById("loginModal").style.display = "flex";
+
+}
+
+
+function openRegister() {
+
+    document.getElementById("registerModal").style.display = "flex";
+
+}
+
+
+function closeModals() {
+
+    document.getElementById("loginModal").style.display = "none";
+
+    document.getElementById("registerModal").style.display = "none";
+
+}
+
+
+function register() {
+
+    let name =
+        document.getElementById("registerName").value;
+
+    let email =
+        document.getElementById("registerEmail").value;
+
+    let password =
+        document.getElementById("registerPassword").value;
+
+    let type =
+        document.getElementById("userType").value;
+
+
+    if (
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        type === ""
+    ) {
+
+        alert("Zəhmət olmasa bütün xanaları doldurun.");
+
         return;
+
     }
 
-    alert("Axtarış edildi: " + search + " " + city);
+
+    alert(
+        "Qeydiyyat forması hazırdır. Real hesab sistemi növbəti mərhələdə qoşulacaq."
+    );
+
 }
+
+
+function login() {
+
+    let email =
+        document.getElementById("loginEmail").value;
+
+    let password =
+        document.getElementById("loginPassword").value;
+
+
+    if (email === "" || password === "") {
+
+        alert("E-poçt və şifrəni daxil edin.");
+
+        return;
+
+    }
+
+
+    alert(
+        "Giriş forması hazırdır. Real giriş sistemi növbəti mərhələdə qoşulacaq."
+    );
+
+}
+
+
+function searchJobs() {
+
+    let search =
+        document.getElementById("search").value;
+
+    let city =
+        document.getElementById("city").value;
+
+
+    if (search === "" && city === "") {
+
+        alert("Zəhmət olmasa iş və ya şəhər seçin.");
+
+        return;
+
+    }
+
+
+    alert(
+        "Axtarış edildi: " +
+        search +
+        " " +
+        city
+    );
+
+}
+
 </script>
 
 </body>
-  </html>
+            </html>
