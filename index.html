@@ -3,340 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zemu.az - Alqı-Satqı Platforması</title>
-    <!-- İkonlar üçün FontAwesome -->
+    <title>Zemu.az - Temu Stili Alqı-Satqı</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS DİZAYN KODLARI -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f4f5f7; padding-bottom: 80px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 12px; }
 
-        body {
-            background-color: #f4f5f7;
-            padding-bottom: 70px;
-        }
+        /* Header */
+        .navbar { background-color: #fff; padding: 10px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .logo { font-size: 22px; font-weight: 800; color: #ff5000; text-decoration: none; white-space: nowrap; }
+        .logo span { color: #111; }
+        .search-box { flex: 1; display: flex; position: relative; }
+        .search-box input { width: 100%; padding: 8px 35px 8px 12px; border: 2px solid #ff5000; border-radius: 20px; outline: none; font-size: 13px; }
+        .search-box button { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: #ff5000; border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
+        /* Cart Icon Header-də */
+        .header-cart-btn { position: relative; font-size: 20px; color: #333; text-decoration: none; padding: 5px; display: flex; align-items: center; }
+        .cart-badge { position: absolute; top: -2px; right: -4px; background: #ff5000; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 50%; min-width: 16px; text-align: center; }
 
-        /* Header / Üst Panel */
-        .navbar {
-            background-color: #fff;
-            padding: 12px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* Product Cards */
+        .section-title { font-size: 17px; margin: 15px 0 10px; color: #222; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; }
+        .card-img { position: relative; width: 100%; padding-top: 100%; }
+        .card-img img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 8px; }
+        .price { font-size: 15px; font-weight: 800; color: #ff5000; }
+        .title { font-size: 12px; color: #333; margin: 3px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .add-cart-btn { width: 100%; background: #fff2eb; color: #ff5000; border: 1px solid #ff5000; padding: 7px; border-radius: 6px; font-weight: bold; font-size: 11px; cursor: pointer; margin-top: 6px; transition: 0.2s; }
+        .add-cart-btn:hover { background: #ff5000; color: #fff; }
 
-        .nav-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        /* Cart & Profile Sections */
+        .cart-item { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .cart-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .cart-item-info { flex: 1; }
+        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .profile-card { background: #fff; padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            color: #ff5000;
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: #111;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 200px;
-            display: flex;
-            position: relative;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 10px 45px 10px 15px;
-            border: 2px solid #ff5000;
-            border-radius: 20px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .search-box button {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #ff5000;
-            border: none;
-            color: #fff;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .add-elan-btn {
-            background-color: #ff5000;
-            color: #fff;
-            padding: 8px 14px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-
-        /* Kateqoriyalar */
-        .categories {
-            display: flex;
-            gap: 15px;
-            margin: 20px auto;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        .cat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            min-width: 70px;
-        }
-
-        .cat-icon {
-            width: 50px;
-            height: 50px;
-            background: #fff;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: #ff5000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .cat-item span {
-            font-size: 12px;
-            color: #444;
-            font-weight: 500;
-        }
-
-        /* Məhsul Kartları */
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: #222;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .card-img {
-            position: relative;
-            width: 100%;
-            padding-top: 100%;
-        }
-
-        .card-img img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 10px;
-        }
-
-        .price {
-            font-size: 16px;
-            font-weight: 800;
-            color: #ff5000;
-        }
-
-        .title {
-            font-size: 13px;
-            color: #333;
-            margin: 4px 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        /* Alt Navigasiya */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
-        }
-
-        .bottom-nav a {
-            text-decoration: none;
-            color: #777;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            gap: 3px;
-        }
-
-        .bottom-nav a.active {
-            color: #ff5000;
-        }
-
-        .bottom-nav i {
-            font-size: 18px;
-        }
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #fff; display: flex; justify-content: space-around; padding: 8px 0; border-top: 1px solid #eee; z-index: 100; }
+        .bottom-nav a { text-decoration: none; color: #777; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 2px; cursor: pointer; position: relative; }
+        .bottom-nav a.active { color: #ff5000; }
+        .bottom-nav i { font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <!-- Header / Üst Panel -->
+    <!-- Header -->
     <header class="navbar">
         <div class="container nav-container">
             <a href="index.html" class="logo">Zemu<span>.az</span></a>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Zemu-da axtarış edin...">
+                <input type="text" id="searchInput" placeholder="Axtarış...">
                 <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
-            <a href="add-elan.html" class="add-elan-btn"><i class="fa-solid fa-circle-plus"></i> ELAN ƏLAVƏ ET</a>
+            <!-- Üst Paneldəki Səbət Düyməsi -->
+            <a href="javascript:void(0)" class="header-cart-btn" onclick="showCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-badge" id="cartCount">0</span>
+            </a>
         </div>
     </header>
 
-    <!-- Kateqoriya Menyusu -->
-    <section class="categories container">
-        <div class="cat-item">
-            <div class="cat-icon"><i class="fa-solid fa-bolt"></i></div>
-            <span>Endirimlər</span>
-        </div>
-        <div class="cat-item">
-            <div class="cat-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
-            <span>Telefonlar</span>
-        </div>
-        <div class="cat-item">
-            <div class="cat-icon"><i class="fa-solid fa-car"></i></div>
-            <span>Nəqliyyat</span>
-        </div>
-        <div class="cat-item">
-            <div class="cat-icon"><i class="fa-solid fa-shirt"></i></div>
-            <span>Geyim</span>
-        </div>
-        <div class="cat-item">
-            <div class="cat-icon"><i class="fa-solid fa-couch"></i></div>
-            <span>Ev əşyaları</span>
-        </div>
-    </section>
-
-    <!-- Əsas Məhsullar Şəbəkəsi -->
-    <main class="container">
-        <h2 class="section-title">Son Elanlar</h2>
-        <div class="products-grid" id="productsGrid">
-            <!-- Elanlar JavaScript vasitəsilə bura yüklənəcək -->
-        </div>
+    <!-- Əsas Məzmun -->
+    <main class="container" id="mainContent">
+        <h2 class="section-title" id="pageTitle">Tövsiyə Edilən Məhsullar</h2>
+        <div class="products-grid" id="productsGrid"></div>
     </main>
 
-    <!-- Mobil Alt Menyusu -->
+    <!-- Mobil Alt Menyu (Səbət Buraya da Əlavə Edildi) -->
     <nav class="bottom-nav">
-        <a href="index.html" class="active"><i class="fa-solid fa-house"></i><span>ƏSAS</span></a>
-        <a href="#"><i class="fa-regular fa-heart"></i><span>SEÇİLMİŞLƏR</span></a>
+        <a onclick="loadProductsPage()" class="active" id="navHome"><i class="fa-solid fa-house"></i><span>ƏSAS</span></a>
+        <a onclick="showCart()" id="navCart">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>SƏBƏT</span>
+            <span class="cart-badge" id="cartCountBottom" style="top:-3px; right: 5px;">0</span>
+        </a>
         <a href="add-elan.html"><i class="fa-solid fa-circle-plus"></i><span>YENİ</span></a>
-        <a href="login.html"><i class="fa-regular fa-user"></i><span>GİRİŞ</span></a>
+        <a onclick="showProfile()" id="navProfile"><i class="fa-regular fa-user"></i><span>KABİNET</span></a>
     </nav>
 
-    <!-- SUPABASE VƏ JAVASCRIPT KODLARI -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Supabase Bağlantısı (Sizin API Açarlarınız İlə)
-        const SUPABASE_URL = 'https://xyzcompany.supabase.co'; 
+        const SUPABASE_URL = 'https://uvxueptxrvpyspjyrigk.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_B5BCQWBmsYKNRd-VtG58Zw_CS4zCpgp';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Elanları Bazadan Çəkən Funksiya
-        async function loadAnnouncements(searchQuery = '') {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Yüklənir...</p>';
+        let currentUser = null;
+
+        async function init() {
+            const { data: { user } } = await _supabase.auth.getUser();
+            currentUser = user;
+            updateCartCount();
+            loadProductsPage();
+        }
+
+        async function updateCartCount() {
+            if (!currentUser) return;
+            const { count } = await _supabase.from('cart').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+            const val = count || 0;
+            document.getElementById('cartCount').innerText = val;
+            document.getElementById('cartCountBottom').innerText = val;
+        }
+
+        function setActiveNav(id) {
+            document.querySelectorAll('.bottom-nav a').forEach(el => el.classList.remove('active'));
+            if(document.getElementById(id)) document.getElementById(id).classList.add('active');
+        }
+
+        async function loadProductsPage(searchQuery = '') {
+            setActiveNav('navHome');
+            document.getElementById('mainContent').innerHTML = `
+                <h2 class="section-title">Tövsiyə Edilən Məhsullar</h2>
+                <div class="products-grid" id="productsGrid"><p style="grid-column: 1/-1; text-align: center;">Yüklənir...</p></div>
+            `;
 
             let query = _supabase.from('announcements').select('*').order('created_at', { ascending: false });
+            if (searchQuery) query = query.ilike('title', `%${searchQuery}%`);
 
-            if (searchQuery) {
-                query = query.ilike('title', `%${searchQuery}%`);
-            }
-
-            const { data: elanlar, error } = await query;
-
-            if (error) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Məlumat yüklənərkən xəta baş verdi.</p>';
-                return;
-            }
-
-            if (!elanlar || elanlar.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Heç bir elan tapılmadı.</p>';
-                return;
-            }
-
+            const { data: elanlar } = await query;
+            const grid = document.getElementById('productsGrid');
             grid.innerHTML = '';
+
+            if(!elanlar || elanlar.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Heç bir məhsul tapılmadı.</p>';
+                return;
+            }
+
             elanlar.forEach(elan => {
-                const card = `
+                grid.innerHTML += `
                     <div class="card">
-                        <div class="card-img">
-                            <img src="${elan.image_url || 'https://via.placeholder.com/300'}" alt="${elan.title}">
+                        <div>
+                            <div class="card-img"><img src="${elan.image_url || 'https://via.placeholder.com/300'}"></div>
+                            <div class="card-body">
+                                <div class="price">${elan.price} AZN</div>
+                                <div class="title">${elan.title}</div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="price">${elan.price} AZN</div>
-                            <div class="title">${elan.title}</div>
+                        <div style="padding: 0 8px 8px 8px;">
+                            <button class="add-cart-btn" onclick="addToCart(${elan.id})"><i class="fa-solid fa-cart-plus"></i> Səbətə At</button>
                         </div>
-                    </div>
-                `;
-                grid.innerHTML += card;
+                    </div>`;
             });
         }
 
-        // Axtarış düyməsi
+        async function addToCart(productId) {
+            if (!currentUser) {
+                alert('Səbətə məhsul əlavə etmək üçün giriş edin!');
+                window.location.href = 'login.html';
+                return;
+            }
+            const { error } = await _supabase.from('cart').insert([{ user_id: currentUser.id, product_id: productId }]);
+            if (!error) {
+                alert('Məhsul səbətə əlavə olundu!');
+                updateCartCount();
+            } else {
+                alert('Xəta baş verdi: ' + error.message);
+            }
+        }
+
+        async function showCart() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            setActiveNav('navCart');
+            document.getElementById('mainContent').innerHTML = `
+                <h2 class="section-title">Mənim Səbətim</h2>
+                <div id="cartList"><p style="text-align: center;">Yüklənir...</p></div>
+            `;
+
+            const { data: cartItems } = await _supabase.from('cart').select('id, announcements(*)').eq('user_id', currentUser.id);
+            const container = document.getElementById('cartList');
+
+            if (!cartItems || cartItems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; margin-top: 20px;">Səbətiniz boşdur.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            cartItems.forEach(item => {
+                const elan = item.announcements;
+                if(elan) {
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <img src="${elan.image_url || 'https://via.placeholder.com/300'}">
+                            <div class="cart-item-info">
+                                <div style="font-weight: bold; font-size: 14px;">${elan.title}</div>
+                                <div style="color: #ff5000; font-weight: bold; margin-top: 4px;">${elan.price} AZN</div>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${item.id})">Sil</button>
+                        </div>`;
+                }
+            });
+        }
+
+        async function removeFromCart(cartId) {
+            await _supabase.from('cart').delete().eq('id', cartId);
+            showCart();
+            updateCartCount();
+        }
+
+        async function showProfile() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            setActiveNav('navProfile');
+            document.getElementById('mainContent').innerHTML = `
+                <div class="profile-card">
+                    <h2>Şəxsi Kabinet</h2>
+                    <p style="margin: 15px 0; color: #555;"><strong>E-poçt:</strong> ${currentUser.email}</p>
+                    <button class="logout-btn" onclick="logout()">Çıxış Et</button>
+                </div>`;
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
         document.getElementById('searchBtn').addEventListener('click', () => {
-            const text = document.getElementById('searchInput').value;
-            loadAnnouncements(text);
+            loadProductsPage(document.getElementById('searchInput').value);
         });
 
-        // Səhifə açılan kimi elanları gətir
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAnnouncements();
-        });
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
