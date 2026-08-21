@@ -21,8 +21,6 @@ body {
     color: #222;
 }
 
-/* HEADER */
-
 header {
     background: #0878d1;
     color: white;
@@ -90,15 +88,11 @@ header {
     font-weight: bold;
 }
 
-/* CONTENT */
-
 .container {
     max-width: 1150px;
     margin: 25px auto;
     padding: 0 15px;
 }
-
-/* CATEGORIES */
 
 .categories {
     background: white;
@@ -130,8 +124,6 @@ header {
     border-color: #0878d1;
     color: #0878d1;
 }
-
-/* FILTER */
 
 .filters {
     background: white;
@@ -165,19 +157,6 @@ header {
     padding: 0 25px;
     border-radius: 7px;
     cursor: pointer;
-}
-
-/* JOBS */
-
-.section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.section-title h2 {
-    font-size: 21px;
 }
 
 .jobs {
@@ -225,11 +204,7 @@ header {
     margin-bottom: 9px;
 }
 
-.company {
-    color: #666;
-    margin-bottom: 8px;
-}
-
+.company,
 .location {
     color: #666;
     margin-bottom: 8px;
@@ -269,30 +244,102 @@ header {
 .profile {
     display: none;
     background: white;
-    padding: 22px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 12px;
     margin-bottom: 22px;
 }
 
 .profile h2 {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    color: #0878d1;
+}
+
+.profile-card {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.profile-left {
+    text-align: center;
+    min-width: 130px;
 }
 
 #profileImage {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
+    background: #e9eef3;
+    display: block;
+    margin: auto;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info p {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.profile-info strong {
+    color: #555;
+}
+
+.profile-edit {
     display: none;
-    margin-bottom: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
 }
 
-.profile input {
-    margin-top: 12px;
+.profile-edit input,
+.profile-edit select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
 }
 
-.profile button {
+.profile-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.profile-buttons button {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #0878d1;
+    color: white;
+}
+
+.logout-btn {
+    background: #e53935;
+    color: white;
+}
+
+.save-btn {
+    background: #20a464;
+    color: white;
+}
+
+.cancel-btn {
+    background: #777;
+    color: white;
+}
+
+.profile-message {
     margin-top: 10px;
+    font-size: 14px;
 }
 
 /* MODAL */
@@ -358,8 +405,6 @@ header {
     font-size: 14px;
 }
 
-/* FOOTER */
-
 footer {
     margin-top: 45px;
     background: #17212b;
@@ -367,8 +412,6 @@ footer {
     text-align: center;
     padding: 25px;
 }
-
-/* MOBILE */
 
 @media (max-width: 800px) {
 
@@ -405,6 +448,14 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    .profile-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-info {
+        width: 100%;
+    }
 }
 </style>
 </head>
@@ -436,6 +487,7 @@ Axtar
 <div class="header-buttons">
 
 <button
+id="loginButton"
 class="login"
 onclick="openLogin()"
 >
@@ -443,10 +495,11 @@ Giriş
 </button>
 
 <button
+id="registerButton"
 class="add"
 onclick="openRegister()"
 >
-Elan yerləşdir
+Qeydiyyat
 </button>
 
 </div>
@@ -466,33 +519,152 @@ id="profileSection"
 class="profile"
 >
 
-<h2>Profilim</h2>
+<h2>👤 Profilim</h2>
 
-<img id="profileImage">
+<div class="profile-card">
 
-<p id="userEmail"></p>
+<div class="profile-left">
 
-<p id="userType"></p>
+<img
+id="profileImage"
+src=""
+alt="Profil şəkli"
+>
 
 <input
 id="imageFile"
 type="file"
 accept="image/*"
+style="display:none"
 >
+
+<button
+class="main-btn"
+onclick="document.getElementById('imageFile').click()"
+>
+Şəkil seç
+</button>
 
 <button
 class="main-btn"
 onclick="uploadProfileImage()"
 >
-Profil şəklini yüklə
+Şəkli yüklə
+</button>
+
+</div>
+
+
+<div class="profile-info">
+
+<p>
+<strong>Ad və soyad:</strong>
+<span id="profileName">-</span>
+</p>
+
+<p>
+<strong>E-poçt:</strong>
+<span id="userEmail">-</span>
+</p>
+
+<p>
+<strong>Telefon:</strong>
+<span id="profilePhone">Əlavə edilməyib</span>
+</p>
+
+<p>
+<strong>Hesab növü:</strong>
+<span id="userType">-</span>
+</p>
+
+<p id="companyRow" style="display:none;">
+<strong>Şirkət adı:</strong>
+<span id="profileCompany">-</span>
+</p>
+
+
+<div class="profile-buttons">
+
+<button
+class="edit-btn"
+onclick="openProfileEdit()"
+>
+✏️ Profili dəyiş
 </button>
 
 <button
-class="main-btn"
+class="logout-btn"
 onclick="logout()"
 >
 Hesabdan çıx
 </button>
+
+</div>
+
+
+<div
+id="profileEdit"
+class="profile-edit"
+>
+
+<input
+id="editName"
+type="text"
+placeholder="Ad və soyad"
+>
+
+<input
+id="editPhone"
+type="text"
+placeholder="Telefon nömrəsi"
+>
+
+<select id="editType">
+
+<option value="job_seeker">
+İş axtaran
+</option>
+
+<option value="company">
+Şirkət
+</option>
+
+</select>
+
+<input
+id="editCompany"
+type="text"
+placeholder="Şirkət adı"
+>
+
+<div class="profile-buttons">
+
+<button
+class="save-btn"
+onclick="saveProfile()"
+>
+💾 Yadda saxla
+</button>
+
+<button
+class="cancel-btn"
+onclick="closeProfileEdit()"
+>
+Bağla
+</button>
+
+</div>
+
+<p
+id="profileMessage"
+class="profile-message"
+></p>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -593,7 +765,6 @@ Axtar
 
 
 <div class="jobs">
-
 
 <div class="job">
 
@@ -735,7 +906,6 @@ Yadda saxla
 
 </div>
 
-
 </div>
 
 </div>
@@ -830,7 +1000,7 @@ placeholder="Şifrə"
 Hesab növünü seçin
 </option>
 
-<option value="jobseeker">
+<option value="job_seeker">
 İş axtaran
 </option>
 
@@ -839,6 +1009,13 @@ Hesab növünü seçin
 </option>
 
 </select>
+
+<input
+id="registerCompany"
+type="text"
+placeholder="Şirkət adı (şirkət hesabı üçün)"
+style="display:none;"
+>
 
 <button
 class="main-btn"
@@ -933,6 +1110,39 @@ document.getElementById(
 
 
 /* =========================
+REGISTER TYPE
+========================= */
+
+document.getElementById(
+"registerType"
+).addEventListener(
+"change",
+function() {
+
+const companyInput =
+document.getElementById(
+"registerCompany"
+);
+
+if (this.value === "company") {
+
+companyInput.style.display =
+"block";
+
+} else {
+
+companyInput.style.display =
+"none";
+
+companyInput.value = "";
+
+}
+
+}
+);
+
+
+/* =========================
 GOOGLE
 ========================= */
 
@@ -991,6 +1201,11 @@ document.getElementById(
 "registerType"
 ).value;
 
+const company =
+document.getElementById(
+"registerCompany"
+).value.trim();
+
 const message =
 document.getElementById(
 "registerMessage"
@@ -1012,7 +1227,20 @@ return;
 }
 
 
-const { error } =
+if (
+type === "company" &&
+!company
+) {
+
+message.textContent =
+"Şirkət adını yazın.";
+
+return;
+
+}
+
+
+const { data, error } =
 await supabaseClient.auth
 .signUp({
 
@@ -1023,8 +1251,9 @@ options: {
 
 data: {
 
-name,
-user_type: type
+full_name: name,
+user_type: type,
+company_name: company
 
 }
 
@@ -1043,8 +1272,14 @@ return;
 }
 
 
+/*
+Profil trigger tərəfindən avtomatik
+yaradılır. E-poçt təsdiqi aktivdirsə,
+istifadəçi əvvəlcə e-poçtunu təsdiqləməlidir.
+*/
+
 message.textContent =
-"Təsdiq məktubu e-poçtunuza göndərildi.";
+"Qeydiyyat tamamlandı. E-poçtunuzu təsdiqləyin.";
 
 }
 
@@ -1094,238 +1329,168 @@ return;
 
 closeModals();
 
-showProfile(data.user);
+await loadProfile(data.user);
 
 }
 
 
 /* =========================
-PROFILE
+LOAD PROFILE
 ========================= */
 
-function showProfile(user) {
+async function loadProfile(user) {
 
 if (!user) return;
+
+
+/*
+Profiles cədvəlindən istifadəçinin
+öz profilini götürürük.
+*/
+
+const { data: profile, error } =
+await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id", user.id)
+.single();
+
+
+if (error) {
+
+console.log(
+"Profil oxunarkən xəta:",
+error.message
+);
+
+/*
+Əgər profil trigger səbəbindən
+hələ yaranmayıbsa, təhlükəsiz şəkildə
+yaradırıq.
+*/
+
+const { data: newProfile } =
+await supabaseClient
+.from("profiles")
+.insert({
+
+id: user.id,
+full_name:
+user.user_metadata?.full_name ||
+user.user_metadata?.name ||
+"",
+email: user.email,
+account_type:
+user.user_metadata?.user_type ||
+"job_seeker",
+company_name:
+user.user_metadata?.company_name ||
+null
+
+})
+.select()
+.single();
+
+if (newProfile) {
+
+displayProfile(
+newProfile
+);
+
+}
+
+return;
+
+}
+
+
+displayProfile(profile);
+
+}
+
+
+/* =========================
+DISPLAY PROFILE
+========================= */
+
+function displayProfile(profile) {
 
 document.getElementById(
 "profileSection"
 ).style.display =
 "block";
 
+
+document.getElementById(
+"profileName"
+).textContent =
+profile.full_name ||
+"Ad əlavə edilməyib";
+
+
 document.getElementById(
 "userEmail"
 ).textContent =
-"E-poçt: " + user.email;
+profile.email ||
+"";
+
+
+document.getElementById(
+"profilePhone"
+).textContent =
+profile.phone ||
+"Əlavə edilməyib";
+
 
 const type =
-user.user_metadata?.user_type;
+profile.account_type;
+
 
 document.getElementById(
 "userType"
 ).textContent =
 type === "company"
-? "Hesab növü: Şirkət"
-: "Hesab növü: İş axtaran";
-
-}
+? "Şirkət"
+: "İş axtaran";
 
 
-/* =========================
-LOGOUT
-========================= */
+const companyRow =
+document.getElementById(
+"companyRow"
+);
 
-async function logout() {
+if (type === "company") {
 
-await supabaseClient.auth.signOut();
+companyRow.style.display =
+"block";
 
 document.getElementById(
-"profileSection"
-).style.display =
+"profileCompany"
+).textContent =
+profile.company_name ||
+"Əlavə edilməyib";
+
+} else {
+
+companyRow.style.display =
 "none";
 
 }
 
 
-/* =========================
-PROFILE IMAGE
-========================= */
-
-async function uploadProfileImage() {
-
-const file =
-document.getElementById(
-"imageFile"
-).files[0];
-
-if (!file) {
-
-alert(
-"Şəkil seçin."
-);
-
-return;
-
-}
-
-
-const {
-data: { user }
-} =
-await supabaseClient.auth
-.getUser();
-
-
-if (!user) {
-
-alert(
-"Əvvəlcə hesaba daxil olun."
-);
-
-return;
-
-}
-
-
-const extension =
-file.name
-.split(".")
-.pop()
-.toLowerCase();
-
-const path =
-user.id +
-"/profile." +
-extension;
-
-
-const { error } =
-await supabaseClient.storage
-.from("profile-images")
-.upload(
-path,
-file,
-{
-upsert: true
-}
-);
-
-
-if (error) {
-
-alert(
-"Şəkil yüklənmədi: " +
-error.message
-);
-
-return;
-
-}
-
-
-const { data } =
-supabaseClient.storage
-.from("profile-images")
-.getPublicUrl(path);
-
+if (profile.avatar_url) {
 
 document.getElementById(
 "profileImage"
 ).src =
-data.publicUrl;
-
-document.getElementById(
-"profileImage"
-).style.display =
-"block";
-
-alert(
-"Profil şəkli yükləndi."
-);
-
-}
-
-
-/* =========================
-SEARCH
-========================= */
-
-function searchJobs() {
-
-const top =
-document.getElementById(
-"topSearch"
-).value.trim();
-
-const job =
-document.getElementById(
-"jobSearch"
-).value.trim();
-
-const city =
-document.getElementById(
-"city"
-).value;
-
-const search =
-job || top;
-
-if (!search && !city) {
-
-alert(
-"Axtarış sözü və ya şəhər seçin."
-);
-
-return;
-
-}
-
-alert(
-"Axtarış: " +
-(search || "Bütün elanlar") +
-(city ? " — " + city : "")
-);
-
-}
-
-
-/* =========================
-CATEGORY
-========================= */
-
-function categorySearch(category) {
-
-document.getElementById(
-"jobSearch"
-).value =
-category;
-
-document.getElementById(
-"jobSearch"
-).scrollIntoView({
-behavior: "smooth"
-});
-
-}
-
-
-/* =========================
-FAVORITE
-========================= */
-
-function favoriteJob(button) {
-
-if (
-button.textContent ===
-"Yadda saxla"
-) {
-
-button.textContent =
-"Yadda saxlanıldı";
+profile.avatar_url;
 
 } else {
 
-button.textContent =
-"Yadda saxla";
+document.getElementById(
+"profileImage"
+).src =
+"";
 
 }
 
@@ -1333,10 +1498,115 @@ button.textContent =
 
 
 /* =========================
-APPLY
+EDIT PROFILE
 ========================= */
 
-async function applyJob() {
+async function openProfileEdit() {
+
+const {
+data: { user }
+} =
+await supabaseClient.auth
+.getUser();
+
+
+if (!user) return;
+
+
+const { data: profile } =
+await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id", user.id)
+.single();
+
+
+if (!profile) return;
+
+
+document.getElementById(
+"editName"
+).value =
+profile.full_name || "";
+
+
+document.getElementById(
+"editPhone"
+).value =
+profile.phone || "";
+
+
+document.getElementById(
+"editType"
+).value =
+profile.account_type ||
+"job_seeker";
+
+
+document.getElementById(
+"editCompany"
+).value =
+profile.company_name || "";
+
+
+document.getElementById(
+"profileEdit"
+).style.display =
+"block";
+
+
+updateCompanyInput();
+
+}
+
+
+/* =========================
+COMPANY FIELD
+========================= */
+
+document.getElementById(
+"editType"
+).addEventListener(
+"change",
+updateCompanyInput
+);
+
+
+function updateCompanyInput() {
+
+const type =
+document.getElementById(
+"editType"
+).value;
+
+const companyInput =
+document.getElementById(
+"editCompany"
+);
+
+if (type === "company") {
+
+companyInput.style.display =
+"block";
+
+} else {
+
+companyInput.style.display =
+"none";
+
+companyInput.value =
+"";
+
+}
+
+}
+
+
+/* =========================
+SAVE PROFILE
+========================= */
+
+async function saveProfile() {
 
 const {
 data: { user }
@@ -1348,47 +1618,63 @@ await supabaseClient.auth
 if (!user) {
 
 alert(
-"Müraciət etmək üçün əvvəlcə daxil olun."
+"Əvvəlcə daxil olun."
 );
-
-openLogin();
 
 return;
 
 }
 
 
-alert(
-"Müraciət funksiyası növbəti mərhələdə aktiv ediləcək."
+const name =
+document.getElementById(
+"editName"
+).value.trim();
+
+const phone =
+document.getElementById(
+"editPhone"
+).value.trim();
+
+const type =
+document.getElementById(
+"editType"
+).value;
+
+const company =
+document.getElementById(
+"editCompany"
+).value.trim();
+
+
+const message =
+document.getElementById(
+"profileMessage"
 );
 
-}
 
+if (!name) {
 
-/* =========================
-CHECK USER
-========================= */
+message.textContent =
+"Ad və soyad boş ola bilməz.";
 
-async function checkUser() {
-
-const {
-data: { user }
-} =
-await supabaseClient.auth
-.getUser();
-
-if (user) {
-
-showProfile(user);
-
-}
+return;
 
 }
 
 
-checkUser();
+if (
+type === "company" &&
+!company
+) {
 
-</script>
+message.textContent =
+"Şirkət adını yazın.";
 
-</body>
-    </html>
+return;
+
+}
+
+
+const { data, error } =
+awai
