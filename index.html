@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zemu.az - Pulsuz Elanlar Saytı</title>
+    <title>Zemu.az - Şəxsi Kabinet və Sifarişlər</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -38,7 +38,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
         }
 
         .logo {
@@ -83,17 +83,48 @@
             cursor: pointer;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-cart-icon {
+            position: relative;
+            font-size: 22px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .google-header-btn {
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
         .add-btn-header {
             background: #ff5000;
             color: #fff;
             text-decoration: none;
-            padding: 9px 16px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
 
         /* CATEGORIES */
@@ -131,7 +162,7 @@
         /* PRODUCTS GRID */
         .section-title {
             font-size: 18px;
-            margin: 10px 0 15px;
+            margin: 15px 0;
             color: #222;
         }
 
@@ -197,52 +228,102 @@
             font-size: 12px;
             cursor: pointer;
             margin-top: 8px;
-            transition: 0.2s;
-        }
-
-        .add-cart-btn:hover {
-            background: #ff5000;
-            color: #fff;
-        }
-
-        /* CART & PROFILE LAYOUT */
-        .cart-item {
-            background: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            gap: 5px;
         }
 
-        .cart-item img {
+        /* KABİNET STİLLƏRİ */
+        .profile-container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-avatar {
             width: 60px;
             height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
+            border-radius: 50%;
+            background: #ff5000;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
         }
 
-        .cart-item-info {
-            flex: 1;
+        .profile-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
         }
 
-        .remove-btn {
-            background: #ff4d4d;
-            color: white;
+        .tab-btn {
+            padding: 10px 15px;
             border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
             cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
         }
 
-        .profile-card {
+        .tab-btn.active {
+            color: #ff5000;
+            border-bottom-color: #ff5000;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 10px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .login-card {
             background: #fff;
-            padding: 20px;
+            padding: 30px 20px;
             border-radius: 12px;
-            margin-top: 20px;
             text-align: center;
+            max-width: 400px;
+            margin: 40px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .google-btn {
+            background: #fff;
+            color: #444;
+            border: 1px solid #ddd;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .logout-btn {
@@ -252,7 +333,7 @@
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         /* BOTTOM NAV */
@@ -314,24 +395,23 @@
                 <input type="text" id="searchInput" placeholder="Əşya və ya xidmət axtarın...">
                 <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
-            <a href="add-elan.html" class="add-btn-header"><i class="fa-solid fa-plus"></i> Elan ver</a>
+            <div class="header-actions">
+                <div class="header-cart-icon" onclick="showCart()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cartCountHeader">0</span>
+                </div>
+                <div id="authHeaderBtn">
+                    <button class="google-header-btn" onclick="loginWithGoogle()">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="16"> Giriş
+                    </button>
+                </div>
+                <a href="add-elan.html" class="add-btn-header"><i class="fa-solid fa-plus"></i> Elan ver</a>
+            </div>
         </div>
     </header>
 
     <!-- Əsas Məzmun -->
-    <main class="container" id="mainContent">
-        <!-- Kateqoriyalar -->
-        <div class="categories" id="categoriesContainer">
-            <div class="cat-item active" onclick="filterCategory('')">Bütün Elanlar</div>
-            <div class="cat-item" onclick="filterCategory('Telefonlar')">Telefonlar</div>
-            <div class="cat-item" onclick="filterCategory('Nəqliyyat')">Nəqliyyat</div>
-            <div class="cat-item" onclick="filterCategory('Eşyalar')">Ev Əşyaları</div>
-            <div class="cat-item" onclick="filterCategory('Geyim')">Geyim</div>
-        </div>
-
-        <h2 class="section-title" id="pageTitle">Son Elanlar</h2>
-        <div class="products-grid" id="productsGrid"></div>
-    </main>
+    <main class="container" id="mainContent"></main>
 
     <!-- Alt Menyu -->
     <nav class="bottom-nav">
@@ -339,7 +419,7 @@
         <a onclick="showCart()" id="navCart">
             <i class="fa-solid fa-cart-shopping"></i>
             <span>SƏBƏT</span>
-            <span class="cart-badge" id="cartCount">0</span>
+            <span class="cart-badge" id="cartCountBottom">0</span>
         </a>
         <a href="add-elan.html"><i class="fa-solid fa-circle-plus"></i><span>YENİ</span></a>
         <a onclick="showProfile()" id="navProfile"><i class="fa-regular fa-user"></i><span>KABİNET</span></a>
@@ -356,6 +436,14 @@
         async function init() {
             const { data: { user } } = await _supabase.auth.getUser();
             currentUser = user;
+            
+            if (currentUser) {
+                document.getElementById('authHeaderBtn').innerHTML = `
+                    <div onclick="showProfile()" style="cursor:pointer; display:flex; align-items:center; gap:5px;">
+                        <i class="fa-solid fa-user-check" style="color:#2ecc71; font-size:18px;"></i>
+                    </div>`;
+            }
+            
             updateCartCount();
             loadProductsPage();
         }
@@ -363,7 +451,9 @@
         async function updateCartCount() {
             if (!currentUser) return;
             const { count } = await _supabase.from('cart').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
-            document.getElementById('cartCount').innerText = count || 0;
+            const val = count || 0;
+            document.getElementById('cartCountHeader').innerText = val;
+            document.getElementById('cartCountBottom').innerText = val;
         }
 
         function setActiveNav(id) {
@@ -371,16 +461,17 @@
             if(document.getElementById(id)) document.getElementById(id).classList.add('active');
         }
 
+        /* 1. ƏSAS SƏHİFƏ VƏ MƏHSULLAR */
         async function loadProductsPage(searchQuery = '', category = '') {
             setActiveNav('navHome');
             
             document.getElementById('mainContent').innerHTML = `
                 <div class="categories">
-                    <div class="cat-item active">Bütün Elanlar</div>
-                    <div class="cat-item">Telefonlar</div>
-                    <div class="cat-item">Nəqliyyat</div>
-                    <div class="cat-item">Ev Əşyaları</div>
-                    <div class="cat-item">Geyim</div>
+                    <div class="cat-item ${category === '' ? 'active' : ''}" onclick="loadProductsPage()">Bütün Elanlar</div>
+                    <div class="cat-item ${category === 'Telefonlar' ? 'active' : ''}" onclick="loadProductsPage('', 'Telefonlar')">Telefonlar</div>
+                    <div class="cat-item ${category === 'Nəqliyyat' ? 'active' : ''}" onclick="loadProductsPage('', 'Nəqliyyat')">Nəqliyyat</div>
+                    <div class="cat-item ${category === 'Ev Əşyaları' ? 'active' : ''}" onclick="loadProductsPage('', 'Ev Əşyaları')">Ev Əşyaları</div>
+                    <div class="cat-item ${category === 'Geyim' ? 'active' : ''}" onclick="loadProductsPage('', 'Geyim')">Geyim</div>
                 </div>
                 <h2 class="section-title">Son Elanlar</h2>
                 <div class="products-grid" id="productsGrid"><p style="grid-column: 1/-1; text-align: center;">Yüklənir...</p></div>
@@ -409,7 +500,7 @@
                             </div>
                         </div>
                         <div style="padding: 0 10px 10px 10px;">
-                            <button class="add-cart-btn" onclick="addToCart(${elan.id})"><i class="fa-solid fa-cart-plus"></i> Səbətə At</button>
+                            <button class="add-cart-btn" onclick="addToCart(${elan.id})"><i class="fa-solid fa-cart-plus"></i> Səbətə at</button>
                         </div>
                     </div>`;
             });
@@ -417,8 +508,8 @@
 
         async function addToCart(productId) {
             if (!currentUser) {
-                alert('Səbətə məhsul əlavə etmək üçün giriş edin!');
-                window.location.href = 'login.html';
+                alert('Məhsul əlavə etmək üçün Google ilə giriş edin!');
+                showProfile();
                 return;
             }
             const { error } = await _supabase.from('cart').insert([{ user_id: currentUser.id, product_id: productId }]);
@@ -430,9 +521,10 @@
             }
         }
 
+        /* 2. SƏBƏT BÖLMƏSİ */
         async function showCart() {
             if (!currentUser) {
-                window.location.href = 'login.html';
+                showProfile();
                 return;
             }
             setActiveNav('navCart');
@@ -454,13 +546,13 @@
                 const elan = item.announcements;
                 if(elan) {
                     container.innerHTML += `
-                        <div class="cart-item">
-                            <img src="${elan.image_url || 'https://via.placeholder.com/300'}">
-                            <div class="cart-item-info">
-                                <div style="font-weight: bold; font-size: 14px;">${elan.title}</div>
-                                <div style="color: #ff5000; font-weight: bold; margin-top: 4px;">${elan.price} AZN</div>
+                        <div style="background:#fff; padding:12px; border-radius:8px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
+                            <img src="${elan.image_url || 'https://via.placeholder.com/300'}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;">
+                            <div style="flex:1;">
+                                <div style="font-weight:bold; font-size:14px;">${elan.title}</div>
+                                <div style="color:#ff5000; font-weight:bold; margin-top:4px;">${elan.price} AZN</div>
                             </div>
-                            <button class="remove-btn" onclick="removeFromCart(${item.id})">Sil</button>
+                            <button onclick="removeFromCart(${item.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Sil</button>
                         </div>`;
                 }
             });
@@ -472,30 +564,35 @@
             updateCartCount();
         }
 
-        async function showProfile() {
+        /* 3. ŞƏXSİ KABİNET (SİFARİŞLƏR, MESAJLAR, İNCƏLƏMƏLƏR) */
+        function showProfile() {
+            setActiveNav('navProfile');
+            
             if (!currentUser) {
-                window.location.href = 'login.html';
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="login-card">
+                        <h2>Hesaba Giriş</h2>
+                        <p style="color:#666; font-size:13px; margin-top:8px;">Şəxsi kabinetə keçmək üçün Google hesabınızla daxil olun.</p>
+                        <button class="google-btn" onclick="loginWithGoogle()">
+                            <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18"> Google ilə daxil ol
+                        </button>
+                    </div>`;
                 return;
             }
-            setActiveNav('navProfile');
+
+            const userName = currentUser.user_metadata?.full_name || currentUser.email.split('@')[0];
+            const userAvatar = currentUser.user_metadata?.avatar_url || '';
+
             document.getElementById('mainContent').innerHTML = `
-                <div class="profile-card">
-                    <h2>Şəxsi Kabinet</h2>
-                    <p style="margin: 15px 0; color: #555;"><strong>E-poçt:</strong> ${currentUser.email}</p>
-                    <button class="logout-btn" onclick="logout()">Çıxış Et</button>
-                </div>`;
-        }
+                <div class="profile-container">
+                    <div class="profile-header">
+                        ${userAvatar ? `<img src="${userAvatar}" style="width:60px; height:60px; border-radius:50%;">` : `<div class="profile-avatar">${userName[0].toUpperCase()}</div>`}
+                        <div>
+                            <h3 style="font-size:16px;">${userName}</h3>
+                            <p style="font-size:12px; color:#777;">${currentUser.email}</p>
+                        </div>
+                    </div>
 
-        async function logout() {
-            await _supabase.auth.signOut();
-            window.location.reload();
-        }
-
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            loadProductsPage(document.getElementById('searchInput').value);
-        });
-
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+                    <div class="profile-tabs">
+                        <button class="tab-btn active" onclick="switchTab('orders')"><i class="fa-solid fa-box"></i> Sifarişlərim</button>
+                        <button class="tab-btn" onclick="switchT
