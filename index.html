@@ -1,1008 +1,1387 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>İş Axtar — Azərbaycan</title>
+<title>İş Axtar — İş elanları</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-        body {
-            background: #f4f6f8;
-            color: #222;
-        }
+body {
+    background: #f3f6f9;
+    color: #222;
+}
 
-        header {
-            background: #1769aa;
-            color: white;
-            padding: 25px 15px;
-            text-align: center;
-        }
+/* HEADER */
 
-        header h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
+header {
+    background: #0878d1;
+    color: white;
+}
 
-        header p {
-            font-size: 15px;
-        }
+.top {
+    max-width: 1150px;
+    margin: auto;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
 
-        .menu {
-            margin-top: 15px;
-        }
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-        .menu button {
-            padding: 11px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-        }
+.search {
+    flex: 1;
+    display: flex;
+}
 
-        .login-btn {
-            background: white;
-            color: #1769aa;
-        }
+.search input {
+    width: 100%;
+    padding: 13px 16px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    border-radius: 7px 0 0 7px;
+}
 
-        .register-btn {
-            background: #0d4f82;
-            color: white;
-        }
+.search button {
+    border: none;
+    background: #075da2;
+    color: white;
+    padding: 0 20px;
+    border-radius: 0 7px 7px 0;
+    cursor: pointer;
+}
 
-        .container {
-            width: 92%;
-            max-width: 900px;
-            margin: 25px auto;
-        }
+.header-buttons {
+    display: flex;
+    gap: 8px;
+}
 
-        .search-box,
-        .job,
-        .profile {
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-        }
+.header-buttons button {
+    border: none;
+    padding: 11px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+}
 
-        .search-box input,
-        .search-box select,
-        .modal-box input,
-        .modal-box select {
-            width: 100%;
-            padding: 13px;
-            margin: 7px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+.login {
+    background: white;
+    color: #0878d1;
+}
 
-        .main-btn {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            background: #1769aa;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
+.add {
+    background: #ffb400;
+    color: #222;
+    font-weight: bold;
+}
 
-        .main-btn:hover {
-            background: #0d4f82;
-        }
+/* CONTENT */
 
-        .job h3 {
-            color: #1769aa;
-            margin-bottom: 8px;
-        }
+.container {
+    max-width: 1150px;
+    margin: 25px auto;
+    padding: 0 15px;
+}
 
-        .job p {
-            margin: 7px 0;
-        }
+/* CATEGORIES */
 
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 1000;
-        }
+.categories {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
 
-        .modal-box {
-            background: white;
-            width: 100%;
-            max-width: 420px;
-            padding: 25px;
-            border-radius: 14px;
-        }
+.categories h2 {
+    font-size: 19px;
+    margin-bottom: 15px;
+}
 
-        .modal-box h2 {
-            color: #1769aa;
-            margin-bottom: 15px;
-        }
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
-        .close-btn {
-            background: #777;
-        }
+.category {
+    border: 1px solid #ddd;
+    padding: 10px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    background: white;
+}
 
-        .profile {
-            display: none;
-        }
+.category:hover {
+    border-color: #0878d1;
+    color: #0878d1;
+}
 
-        #profileImage {
-            width: 110px;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 50%;
-            display: none;
-            margin: 15px auto;
-        }
+/* FILTER */
 
-        .user-info {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+.filters {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
 
-        footer {
-            background: #222;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-        }
+.filters h2 {
+    font-size: 19px;
+    margin-bottom: 12px;
+}
 
-        .success {
-            color: green;
-            margin-top: 10px;
-            text-align: center;
-        }
+.filter-row {
+    display: flex;
+    gap: 10px;
+}
 
-        .error {
-            color: red;
-            margin-top: 10px;
-            text-align: center;
-        }
-    </style>
+.filter-row input,
+.filter-row select {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.filter-row button {
+    background: #0878d1;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* JOBS */
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-title h2 {
+    font-size: 21px;
+}
+
+.jobs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.job {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e4e4e4;
+    transition: .2s;
+}
+
+.job:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(0,0,0,.08);
+}
+
+.job-image {
+    width: 100%;
+    height: 175px;
+    background: #e9eef3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+}
+
+.job-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.job-content {
+    padding: 16px;
+}
+
+.job-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 9px;
+}
+
+.company {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.location {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.salary {
+    color: #0878d1;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.job-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.apply {
+    background: #0878d1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.favorite {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 9px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* PROFILE */
+
+.profile {
+    display: none;
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+
+.profile h2 {
+    margin-bottom: 15px;
+}
+
+#profileImage {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: none;
+    margin-bottom: 12px;
+}
+
+.profile input {
+    margin-top: 12px;
+}
+
+.profile button {
+    margin-top: 10px;
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    z-index: 999;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 420px;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.modal-box h2 {
+    margin-bottom: 18px;
+    color: #0878d1;
+}
+
+.modal-box input,
+.modal-box select {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    background: #0878d1;
+    color: white;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 15px;
+}
+
+.google-btn {
+    background: white;
+    color: #222;
+    border: 1px solid #ccc;
+}
+
+.close-btn {
+    background: #777;
+}
+
+.message {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 45px;
+    background: #17212b;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .top {
+        flex-wrap: wrap;
+    }
+
+    .logo {
+        width: 100%;
+        text-align: center;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .header-buttons {
+        width: 100%;
+    }
+
+    .header-buttons button {
+        flex: 1;
+    }
+
+    .filter-row {
+        flex-direction: column;
+    }
+
+    .filter-row button {
+        padding: 13px;
+    }
+
+    .jobs {
+        grid-template-columns: 1fr;
+    }
+
+}
+</style>
 </head>
 
 <body>
 
 <header>
 
-    <h1>İş Axtar</h1>
+<div class="top">
 
-    <p>Azərbaycanda iş elanlarını asanlıqla tap</p>
+<div class="logo">
+İş Axtar
+</div>
 
-    <div class="menu">
+<div class="search">
 
-        <button
-            class="login-btn"
-            onclick="openLogin()">
-            Giriş
-        </button>
+<input
+id="topSearch"
+type="text"
+placeholder="İş, peşə və ya şirkət axtar"
+>
 
-        <button
-            class="register-btn"
-            onclick="openRegister()">
-            Qeydiyyat
-        </button>
+<button onclick="searchJobs()">
+Axtar
+</button>
 
-    </div>
+</div>
+
+<div class="header-buttons">
+
+<button
+class="login"
+onclick="openLogin()"
+>
+Giriş
+</button>
+
+<button
+class="add"
+onclick="openRegister()"
+>
+Elan yerləşdir
+</button>
+
+</div>
+
+</div>
 
 </header>
 
 
 <div class="container">
 
-    <!-- AXTARIŞ -->
 
-    <div class="search-box">
+<!-- PROFILE -->
 
-        <input
-            type="text"
-            id="search"
-            placeholder="Məsələn: Proqramçı, Mühasib, Sürücü..."
-        >
+<div
+id="profileSection"
+class="profile"
+>
 
-        <select id="city">
+<h2>Profilim</h2>
 
-            <option value="">
-                Şəhər seçin
-            </option>
+<img id="profileImage">
 
-            <option>Bakı</option>
-            <option>Gəncə</option>
-            <option>Sumqayıt</option>
-            <option>Mingəçevir</option>
-            <option>Şəki</option>
-            <option>Lənkəran</option>
-            <option>Yevlax</option>
+<p id="userEmail"></p>
 
-        </select>
+<p id="userType"></p>
 
-        <button
-            class="main-btn"
-            onclick="searchJobs()">
-            İş axtar
-        </button>
+<input
+id="imageFile"
+type="file"
+accept="image/*"
+>
 
-    </div>
+<button
+class="main-btn"
+onclick="uploadProfileImage()"
+>
+Profil şəklini yüklə
+</button>
 
-
-    <!-- PROFİL -->
-
-    <div
-        id="profileSection"
-        class="profile">
-
-        <h2>Profilim</h2>
-
-        <div class="user-info">
-
-            <img
-                id="profileImage"
-                alt="Profil şəkli"
-            >
-
-            <p id="userEmail"></p>
-
-            <p id="userType"></p>
-
-        </div>
-
-
-        <input
-            id="imageFile"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-        >
-
-        <button
-            class="main-btn"
-            onclick="uploadProfileImage()">
-            📷 Profil şəklini yüklə
-        </button>
-
-        <button
-            class="main-btn"
-            onclick="logout()">
-            Hesabdan çıx
-        </button>
-
-    </div>
-
-
-    <!-- ELANLAR -->
-
-    <h2 style="margin-bottom:15px;">
-        Son iş elanları
-    </h2>
-
-
-    <div class="job">
-
-        <h3>Frontend Proqramçı</h3>
-
-        <p>📍 Bakı</p>
-
-        <p>💰 Maaş: 1000 - 1800 AZN</p>
-
-        <p>💼 Tam iş günü</p>
-
-        <button
-            class="main-btn"
-            onclick="applyJob()">
-            Müraciət et
-        </button>
-
-    </div>
-
-
-    <div class="job">
-
-        <h3>Mühasib</h3>
-
-        <p>📍 Gəncə</p>
-
-        <p>💰 Maaş: 700 - 1200 AZN</p>
-
-        <p>💼 Tam iş günü</p>
-
-        <button
-            class="main-btn"
-            onclick="applyJob()">
-            Müraciət et
-        </button>
-
-    </div>
-
-
-    <div class="job">
-
-        <h3>Sürücü</h3>
-
-        <p>📍 Sumqayıt</p>
-
-        <p>💰 Maaş: 600 - 1000 AZN</p>
-
-        <p>💼 Tam iş günü</p>
-
-        <button
-            class="main-btn"
-            onclick="applyJob()">
-            Müraciət et
-        </button>
-
-    </div>
+<button
+class="main-btn"
+onclick="logout()"
+>
+Hesabdan çıx
+</button>
 
 </div>
 
 
-<!-- QEYDİYYAT -->
+<!-- CATEGORIES -->
 
-<div
-    class="modal"
-    id="registerModal">
+<div class="categories">
 
-    <div class="modal-box">
+<h2>Kateqoriyalar</h2>
 
-        <h2>Qeydiyyat</h2>
+<div class="category-list">
 
-        <input
-            id="registerName"
-            type="text"
-            placeholder="Ad və soyad"
-        >
+<div class="category"
+onclick="categorySearch('İT')">
+İT və proqramlaşdırma
+</div>
 
-        <input
-            id="registerEmail"
-            type="email"
-            placeholder="E-poçt"
-        >
+<div class="category"
+onclick="categorySearch('Maliyyə')">
+Maliyyə və mühasibat
+</div>
 
-        <input
-            id="registerPassword"
-            type="password"
-            placeholder="Şifrə"
-        >
+<div class="category"
+onclick="categorySearch('Satış')">
+Satış
+</div>
 
-        <select id="registerType">
+<div class="category"
+onclick="categorySearch('Marketinq')">
+Marketinq
+</div>
 
-            <option value="">
-                Hesab növünü seçin
-            </option>
+<div class="category"
+onclick="categorySearch('Təhsil')">
+Təhsil
+</div>
 
-            <option value="jobseeker">
-                👤 İş axtaran
-            </option>
+<div class="category"
+onclick="categorySearch('Sürücü')">
+Sürücülər
+</div>
 
-            <option value="company">
-                🏢 Şirkət
-            </option>
+<div class="category"
+onclick="categorySearch('Xidmət')">
+Xidmət
+</div>
 
-        </select>
-
-        <button
-            class="main-btn"
-            onclick="register()">
-            Qeydiyyatdan keç
-        </button>
-
-        <button
-            class="main-btn close-btn"
-            onclick="closeModals()">
-            Bağla
-        </button>
-
-        <p id="registerMessage"></p>
-
-    </div>
+</div>
 
 </div>
 
 
-<!-- GİRİŞ -->
+<!-- FILTER -->
+
+<div class="filters">
+
+<h2>İş axtar</h2>
+
+<div class="filter-row">
+
+<input
+id="jobSearch"
+placeholder="Vəzifə və ya açar söz"
+>
+
+<select id="city">
+
+<option value="">
+Bütün şəhərlər
+</option>
+
+<option>Bakı</option>
+<option>Gəncə</option>
+<option>Sumqayıt</option>
+<option>Mingəçevir</option>
+<option>Şəki</option>
+<option>Lənkəran</option>
+<option>Yevlax</option>
+
+</select>
+
+<button onclick="searchJobs()">
+Axtar
+</button>
+
+</div>
+
+</div>
+
+
+<!-- JOBS -->
+
+<div class="section-title">
+
+<h2>Son elanlar</h2>
+
+</div>
+
+
+<div class="jobs">
+
+
+<div class="job">
+
+<div class="job-image">
+Şəkil yoxdur
+</div>
+
+<div class="job-content">
+
+<div class="job-title">
+Frontend Proqramçı
+</div>
+
+<div class="company">
+ABC Technology
+</div>
+
+<div class="location">
+Bakı
+</div>
+
+<div class="salary">
+1000 – 1800 AZN
+</div>
+
+<div class="job-bottom">
+
+<button
+class="apply"
+onclick="applyJob()"
+>
+Müraciət et
+</button>
+
+<button
+class="favorite"
+onclick="favoriteJob(this)"
+>
+Yadda saxla
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="job">
+
+<div class="job-image">
+Şəkil yoxdur
+</div>
+
+<div class="job-content">
+
+<div class="job-title">
+Mühasib
+</div>
+
+<div class="company">
+Bakı Maliyyə
+</div>
+
+<div class="location">
+Gəncə
+</div>
+
+<div class="salary">
+700 – 1200 AZN
+</div>
+
+<div class="job-bottom">
+
+<button
+class="apply"
+onclick="applyJob()"
+>
+Müraciət et
+</button>
+
+<button
+class="favorite"
+onclick="favoriteJob(this)"
+>
+Yadda saxla
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="job">
+
+<div class="job-image">
+Şəkil yoxdur
+</div>
+
+<div class="job-content">
+
+<div class="job-title">
+Sürücü
+</div>
+
+<div class="company">
+Logistika MMC
+</div>
+
+<div class="location">
+Sumqayıt
+</div>
+
+<div class="salary">
+600 – 1000 AZN
+</div>
+
+<div class="job-bottom">
+
+<button
+class="apply"
+onclick="applyJob()"
+>
+Müraciət et
+</button>
+
+<button
+class="favorite"
+onclick="favoriteJob(this)"
+>
+Yadda saxla
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- LOGIN -->
 
 <div
-    class="modal"
-    id="loginModal">
+class="modal"
+id="loginModal"
+>
 
-    <div class="modal-box">
+<div class="modal-box">
 
-        <h2>Hesaba giriş</h2>
+<h2>Hesaba giriş</h2>
 
-        <input
-            id="loginEmail"
-            type="email"
-            placeholder="E-poçt"
-        >
+<input
+id="loginEmail"
+type="email"
+placeholder="E-poçt"
+>
 
-        <input
-            id="loginPassword"
-            type="password"
-            placeholder="Şifrə"
-        >
+<input
+id="loginPassword"
+type="password"
+placeholder="Şifrə"
+>
 
-        <button
-            class="main-btn"
-            onclick="login()">
-            Daxil ol
-        </button>
+<button
+class="main-btn"
+onclick="login()"
+>
+Daxil ol
+</button>
 
-        <button
-            class="main-btn close-btn"
-            onclick="closeModals()">
-            Bağla
-        </button>
+<button
+class="main-btn google-btn"
+onclick="googleLogin()"
+>
+Google ilə davam et
+</button>
 
-        <p id="loginMessage"></p>
+<button
+class="main-btn close-btn"
+onclick="closeModals()"
+>
+Bağla
+</button>
 
-    </div>
+<p
+id="loginMessage"
+class="message"
+></p>
+
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div
+class="modal"
+id="registerModal"
+>
+
+<div class="modal-box">
+
+<h2>Qeydiyyat</h2>
+
+<input
+id="registerName"
+type="text"
+placeholder="Ad və soyad"
+>
+
+<input
+id="registerEmail"
+type="email"
+placeholder="E-poçt"
+>
+
+<input
+id="registerPassword"
+type="password"
+placeholder="Şifrə"
+>
+
+<select id="registerType">
+
+<option value="">
+Hesab növünü seçin
+</option>
+
+<option value="jobseeker">
+İş axtaran
+</option>
+
+<option value="company">
+Şirkət
+</option>
+
+</select>
+
+<button
+class="main-btn"
+onclick="register()"
+>
+Qeydiyyatdan keç
+</button>
+
+<button
+class="main-btn google-btn"
+onclick="googleLogin()"
+>
+Google ilə qeydiyyat
+</button>
+
+<button
+class="main-btn close-btn"
+onclick="closeModals()"
+>
+Bağla
+</button>
+
+<p
+id="registerMessage"
+class="message"
+></p>
+
+</div>
 
 </div>
 
 
 <footer>
 
-    © 2026 İş Axtar — Azərbaycanda iş elanları
+İş Axtar © 2026
 
 </footer>
 
 
 <script>
 
-/* =================================
-   SUPABASE
-   ================================= */
+/* =========================
+SUPABASE
+========================= */
 
 const SUPABASE_URL =
-    "https://uvxueptxrvpyspjyrigk.supabase.co";
+"https://uvxueptxrvpyspjyrigk.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_B5BCQWBmsYKNRd-VtG58Zw_CS4zCpgp";
+"sb_publishable_B5BCQWBmsYKNRd-VtG58Zw_CS4zCpgp";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
-/* =================================
-   PƏNCƏRƏLƏR
-   ================================= */
+/* =========================
+MODALS
+========================= */
 
 function openLogin() {
 
-    document.getElementById(
-        "loginModal"
-    ).style.display = "flex";
+document.getElementById(
+"loginModal"
+).style.display = "flex";
 
 }
 
 
 function openRegister() {
 
-    document.getElementById(
-        "registerModal"
-    ).style.display = "flex";
+document.getElementById(
+"registerModal"
+).style.display = "flex";
 
 }
 
 
 function closeModals() {
 
-    document.getElementById(
-        "loginModal"
-    ).style.display = "none";
+document.getElementById(
+"loginModal"
+).style.display = "none";
 
-    document.getElementById(
-        "registerModal"
-    ).style.display = "none";
+document.getElementById(
+"registerModal"
+).style.display = "none";
 
 }
 
 
-/* =================================
-   QEYDİYYAT
-   ================================= */
+/* =========================
+GOOGLE
+========================= */
+
+async function googleLogin() {
+
+const { error } =
+await supabaseClient.auth
+.signInWithOAuth({
+
+provider: "google",
+
+options: {
+
+redirectTo:
+"https://mustafazadequdret082-creator.github.io/is-axtar/"
+
+}
+
+});
+
+if (error) {
+
+alert(
+"Google giriş xətası: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+REGISTER
+========================= */
 
 async function register() {
 
-    const name =
-        document.getElementById(
-            "registerName"
-        ).value.trim();
+const name =
+document.getElementById(
+"registerName"
+).value.trim();
 
-    const email =
-        document.getElementById(
-            "registerEmail"
-        ).value.trim();
+const email =
+document.getElementById(
+"registerEmail"
+).value.trim();
 
-    const password =
-        document.getElementById(
-            "registerPassword"
-        ).value;
+const password =
+document.getElementById(
+"registerPassword"
+).value;
 
-    const type =
-        document.getElementById(
-            "registerType"
-        ).value;
+const type =
+document.getElementById(
+"registerType"
+).value;
 
-    const message =
-        document.getElementById(
-            "registerMessage"
-        );
-
-
-    message.className = "";
-    message.textContent = "";
+const message =
+document.getElementById(
+"registerMessage"
+);
 
 
-    if (
-        !name ||
-        !email ||
-        !password ||
-        !type
-    ) {
+if (
+!name ||
+!email ||
+!password ||
+!type
+) {
 
-        message.className = "error";
+message.textContent =
+"Bütün xanaları doldurun.";
 
-        message.textContent =
-            "Bütün xanaları doldurun.";
-
-        return;
-
-    }
-
-
-    if (password.length < 6) {
-
-        message.className = "error";
-
-        message.textContent =
-            "Şifrə ən azı 6 simvol olmalıdır.";
-
-        return;
-
-    }
-
-
-    const { data, error } =
-        await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-                data: {
-
-                    name: name,
-
-                    user_type: type
-
-                }
-
-            }
-
-        });
-
-
-    if (error) {
-
-        message.className = "error";
-
-        message.textContent =
-            "Xəta: " + error.message;
-
-        return;
-
-    }
-
-
-    message.className = "success";
-
-    message.textContent =
-        "Qeydiyyat yaradıldı! E-poçt təsdiqi tələb olunarsa, e-poçtunu yoxla.";
+return;
 
 }
 
 
-/* =================================
-   GİRİŞ
-   ================================= */
+const { error } =
+await supabaseClient.auth
+.signUp({
+
+email,
+password,
+
+options: {
+
+data: {
+
+name,
+user_type: type
+
+}
+
+}
+
+});
+
+
+if (error) {
+
+message.textContent =
+"Xəta: " + error.message;
+
+return;
+
+}
+
+
+message.textContent =
+"Təsdiq məktubu e-poçtunuza göndərildi.";
+
+}
+
+
+/* =========================
+LOGIN
+========================= */
 
 async function login() {
 
-    const email =
-        document.getElementById(
-            "loginEmail"
-        ).value.trim();
+const email =
+document.getElementById(
+"loginEmail"
+).value.trim();
 
-    const password =
-        document.getElementById(
-            "loginPassword"
-        ).value;
+const password =
+document.getElementById(
+"loginPassword"
+).value;
 
-    const message =
-        document.getElementById(
-            "loginMessage"
-        );
-
-
-    message.className = "";
-    message.textContent = "";
+const message =
+document.getElementById(
+"loginMessage"
+);
 
 
-    if (!email || !password) {
+const { data, error } =
+await supabaseClient.auth
+.signInWithPassword({
 
-        message.className = "error";
+email,
+password
 
-        message.textContent =
-            "E-poçt və şifrəni daxil edin.";
-
-        return;
-
-    }
+});
 
 
-    const { data, error } =
-        await supabaseClient.auth
-            .signInWithPassword({
+if (error) {
 
-                email: email,
+message.textContent =
+"Giriş alınmadı: " +
+error.message;
 
-                password: password
-
-            });
-
-
-    if (error) {
-
-        message.className = "error";
-
-        message.textContent =
-            "Giriş alınmadı: " +
-            error.message;
-
-        return;
-
-    }
-
-
-    message.className = "success";
-
-    message.textContent =
-        "Uğurla daxil oldunuz!";
-
-    closeModals();
-
-    showProfile(data.user);
+return;
 
 }
 
 
-/* =================================
-   PROFİLİ GÖSTƏR
-   ================================= */
+closeModals();
+
+showProfile(data.user);
+
+}
+
+
+/* =========================
+PROFILE
+========================= */
 
 function showProfile(user) {
 
-    if (!user) return;
+if (!user) return;
 
+document.getElementById(
+"profileSection"
+).style.display =
+"block";
 
-    document.getElementById(
-        "profileSection"
-    ).style.display = "block";
+document.getElementById(
+"userEmail"
+).textContent =
+"E-poçt: " + user.email;
 
+const type =
+user.user_metadata?.user_type;
 
-    document.getElementById(
-        "userEmail"
-    ).textContent =
-        "📧 E-poçt: " + user.email;
-
-
-    const type =
-        user.user_metadata?.user_type;
-
-
-    if (type === "company") {
-
-        document.getElementById(
-            "userType"
-        ).textContent =
-            "🏢 Hesab növü: Şirkət";
-
-    } else {
-
-        document.getElementById(
-            "userType"
-        ).textContent =
-            "👤 Hesab növü: İş axtaran";
-
-    }
+document.getElementById(
+"userType"
+).textContent =
+type === "company"
+? "Hesab növü: Şirkət"
+: "Hesab növü: İş axtaran";
 
 }
 
 
-/* =================================
-   ÇIXIŞ
-   ================================= */
+/* =========================
+LOGOUT
+========================= */
 
 async function logout() {
 
-    const { error } =
-        await supabaseClient.auth.signOut();
+await supabaseClient.auth.signOut();
 
-
-    if (error) {
-
-        alert(
-            "Çıxış zamanı xəta baş verdi."
-        );
-
-        return;
-
-    }
-
-
-    document.getElementById(
-        "profileSection"
-    ).style.display = "none";
-
-
-    alert(
-        "Hesabdan çıxış edildi."
-    );
+document.getElementById(
+"profileSection"
+).style.display =
+"none";
 
 }
 
 
-/* =================================
-   PROFİL ŞƏKLİ YÜKLƏ
-   ================================= */
+/* =========================
+PROFILE IMAGE
+========================= */
 
 async function uploadProfileImage() {
 
-    const file =
-        document.getElementById(
-            "imageFile"
-        ).files[0];
+const file =
+document.getElementById(
+"imageFile"
+).files[0];
 
+if (!file) {
 
-    if (!file) {
+alert(
+"Şəkil seçin."
+);
 
-        alert(
-            "Əvvəlcə şəkil seçin."
-        );
-
-        return;
-
-    }
-
-
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth
-            .getUser();
-
-
-    if (!user) {
-
-        alert(
-            "Əvvəlcə hesabınıza daxil olun."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !file.type.startsWith(
-            "image/"
-        )
-    ) {
-
-        alert(
-            "Yalnız şəkil faylı seçin."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        file.size >
-        5 * 1024 * 1024
-    ) {
-
-        alert(
-            "Şəkil 5 MB-dan böyük ola bilməz."
-        );
-
-        return;
-
-    }
-
-
-    const extension =
-        file.name
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-
-    const filePath =
-        user.id +
-        "/profile." +
-        extension;
-
-
-    const { error } =
-        await supabaseClient.storage
-            .from("profile-images")
-            .upload(
-
-                filePath,
-
-                file,
-
-                {
-                    upsert: true
-                }
-
-            );
-
-
-    if (error) {
-
-        alert(
-            "Şəkil yüklənmədi: " +
-            error.message
-        );
-
-        return;
-
-    }
-
-
-    const { data } =
-        supabaseClient.storage
-            .from("profile-images")
-            .getPublicUrl(
-                filePath
-            );
-
-
-    document.getElementById(
-        "profileImage"
-    ).src =
-        data.publicUrl;
-
-
-    document.getElementById(
-        "profileImage"
-    ).style.display =
-        "block";
-
-
-    alert(
-        "Profil şəkli uğurla yükləndi! 📷"
-    );
+return;
 
 }
 
 
-/* =================================
-   AXTARIŞ
-   ================================= */
+const {
+data: { user }
+} =
+await supabaseClient.auth
+.getUser();
+
+
+if (!user) {
+
+alert(
+"Əvvəlcə hesaba daxil olun."
+);
+
+return;
+
+}
+
+
+const extension =
+file.name
+.split(".")
+.pop()
+.toLowerCase();
+
+const path =
+user.id +
+"/profile." +
+extension;
+
+
+const { error } =
+await supabaseClient.storage
+.from("profile-images")
+.upload(
+path,
+file,
+{
+upsert: true
+}
+);
+
+
+if (error) {
+
+alert(
+"Şəkil yüklənmədi: " +
+error.message
+);
+
+return;
+
+}
+
+
+const { data } =
+supabaseClient.storage
+.from("profile-images")
+.getPublicUrl(path);
+
+
+document.getElementById(
+"profileImage"
+).src =
+data.publicUrl;
+
+document.getElementById(
+"profileImage"
+).style.display =
+"block";
+
+alert(
+"Profil şəkli yükləndi."
+);
+
+}
+
+
+/* =========================
+SEARCH
+========================= */
 
 function searchJobs() {
 
-    const search =
-        document.getElementById(
-            "search"
-        ).value.trim();
+const top =
+document.getElementById(
+"topSearch"
+).value.trim();
 
-    const city =
-        document.getElementById(
-            "city"
-        ).value;
+const job =
+document.getElementById(
+"jobSearch"
+).value.trim();
 
+const city =
+document.getElementById(
+"city"
+).value;
 
-    if (!search && !city) {
+const search =
+job || top;
 
-        alert(
-            "İş adı və ya şəhər seçin."
-        );
+if (!search && !city) {
 
-        return;
+alert(
+"Axtarış sözü və ya şəhər seçin."
+);
 
-    }
+return;
 
+}
 
-    alert(
-        "Axtarış edildi: " +
-        search +
-        " " +
-        city
-    );
+alert(
+"Axtarış: " +
+(search || "Bütün elanlar") +
+(city ? " — " + city : "")
+);
 
 }
 
 
-/* =================================
-   MÜRACİƏT
-   ================================= */
+/* =========================
+CATEGORY
+========================= */
+
+function categorySearch(category) {
+
+document.getElementById(
+"jobSearch"
+).value =
+category;
+
+document.getElementById(
+"jobSearch"
+).scrollIntoView({
+behavior: "smooth"
+});
+
+}
+
+
+/* =========================
+FAVORITE
+========================= */
+
+function favoriteJob(button) {
+
+if (
+button.textContent ===
+"Yadda saxla"
+) {
+
+button.textContent =
+"Yadda saxlanıldı";
+
+} else {
+
+button.textContent =
+"Yadda saxla";
+
+}
+
+}
+
+
+/* =========================
+APPLY
+========================= */
 
 async function applyJob() {
 
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth
-            .getUser();
+const {
+data: { user }
+} =
+await supabaseClient.auth
+.getUser();
 
 
-    if (!user) {
+if (!user) {
 
-        alert(
-            "Müraciət etmək üçün əvvəlcə qeydiyyatdan keçin və ya daxil olun."
-        );
+alert(
+"Müraciət etmək üçün əvvəlcə daxil olun."
+);
 
-        openLogin();
+openLogin();
 
-        return;
-
-    }
-
-
-    alert(
-        "Müraciət sistemi növbəti mərhələdə aktiv ediləcək."
-    );
+return;
 
 }
 
 
-/* =================================
-   SAYT AÇILANDA HESABI YOXLAYIR
-   ================================= */
+alert(
+"Müraciət funksiyası növbəti mərhələdə aktiv ediləcək."
+);
+
+}
+
+
+/* =========================
+CHECK USER
+========================= */
 
 async function checkUser() {
 
-    const {
-        data: { user }
-    } =
-        await supabaseClient.auth
-            .getUser();
+const {
+data: { user }
+} =
+await supabaseClient.auth
+.getUser();
 
+if (user) {
 
-    if (user) {
+showProfile(user);
 
-        showProfile(user);
-
-    }
+}
 
 }
 
@@ -1012,4 +1391,4 @@ checkUser();
 </script>
 
 </body>
-            </html>
+    </html>
