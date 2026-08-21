@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elan Əlavə Et - Zemu.az</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f5f7;
+            padding-bottom: 70px;
+        }
+
+        .header-bar {
+            background: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .back-btn {
+            color: #333;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #ff5000;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #ff5000;
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+        }
+
+        /* Alt Navigasiya */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+
+        .bottom-nav a {
+            text-decoration: none;
+            color: #777;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            gap: 3px;
+        }
+
+        .bottom-nav a.active {
+            color: #ff5000;
+        }
+
+        .bottom-nav i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <div class="header-title">Yeni Elan Əlavə Et</div>
+    </div>
+
+    <div class="form-container">
+        <form id="addForm">
+            <div class="form-group">
+                <label for="title">Elanın Başlığı*</label>
+                <input type="text" id="title" placeholder="Məsələn: iPhone 13 Pro Max 128GB" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Qiymət (AZN)*</label>
+                <input type="number" id="price" placeholder="Məsələn: 1200" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image_url">Şəkil Linki (URL)</label>
+                <input type="url" id="image_url" placeholder="https://daxil-edin.com/səkil.jpg">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Ətraflı Məlumat</label>
+                <textarea id="description" rows="4" placeholder="Məhsul haqqında ətraflı yazın..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn" id="saveBtn">Elanı Yerləşdir</button>
+        </form>
+    </div>
+
+    <!-- Alt Navigasiya -->
+    <nav class="bottom-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i><span>ƏSAS</span></a>
+        <a href="#"><i class="fa-regular fa-heart"></i><span>SEÇİLMİŞLƏR</span></a>
+        <a href="add-elan.html" class="active"><i class="fa-solid fa-circle-plus"></i><span>YENİ</span></a>
+        <a href="login.html"><i class="fa-regular fa-user"></i><span>GİRİŞ</span></a>
+    </nav>
+
+    <!-- SUPABASE SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uvxueptxrvpyspjyrigk.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_B5BCQWBmsYKNRd-VtG58Zw_CS4zCpgp';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        document.getElementById('addForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerText = 'Göndərilir...';
+
+            const title = document.getElementById('title').value;
+            const price = parseFloat(document.getElementById('price').value);
+            const image_url = document.getElementById('image_url').value;
+            const description = document.getElementById('description').value;
+
+            const { data, error } = await _supabase
+                .from('announcements')
+                .insert([
+                    { 
+                        title: title, 
+                        price: price, 
+                        image_url: image_url || 'https://via.placeholder.com/300',
+                        description: description 
+                    }
+                ]);
+
+            if (error) {
+                alert('Xəta baş verdi: ' + error.message);
+                btn.disabled = false;
+                btn.innerText = 'Elanı Yerləşdir';
+            } else {
+                alert('Elan uğurla əlavə olundu!');
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
